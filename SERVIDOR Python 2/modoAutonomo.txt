@@ -1,0 +1,10 @@
+encender
+20
+25
+30
+4
+der
+der
+der
+abrir
+moverOrigen
