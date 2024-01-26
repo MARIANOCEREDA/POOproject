@@ -12,10 +12,18 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
+option(ENABLE_DOC "Create Doxygen Documentation" OFF)
+
 include_directories(
     ${CMAKE_SOURCE_DIR}/lib/XmlRpc
     ${CMAKE_SOURCE_DIR}/src/include
 )
+
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/)
+
+if(ENABLE_DOC)
+    include(Docs)
+endif()
 
 add_subdirectory(lib/XmlRpc)
 add_subdirectory(src)

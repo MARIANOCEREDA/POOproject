@@ -39,9 +39,6 @@ namespace UserInterface
             std::atomic<bool>        stopLoops;
             bool                     robotTaskFinished;
 
-            // Robot Data
-            std::vector<int> joints;
-            XmlRpc::XmlRpcValue noArgs, result, oneArg, args;
 
             void DisplayMenu();
             void ParseCommand();
