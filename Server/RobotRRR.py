@@ -1,74 +1,87 @@
-from Articulacion import Articulacion
-from Pinza import Pinza
+from Joint import Joint
+from Gripper import Gripper
 import time
 
-class RobotRRR():
+class RobotRRR:
+    '''
+    '''
+
     def __init__(self):
+
         ##Tiempo total (suma de cada una de cada operacion)
-        self.tiempoTotal = 0
+        self.total_time = 0
+
         ##Lista comandos: rellena con los ángulos recibidos desde el cliente
-        self.listaAngulos = [0,0,0]
-        self.listaSentidosGiro = ["der","der","der"]
+        self.angles = [0,0,0]
+        self.rotation_direction = ["der","der","der"]
+
         ##Modo de operacion: 0-> manual / 1-> automatico
-        self.modoOperacion = 0
+        self.operation_mode = 0
+
         ##Velocidad de operacion:
-        self.velocidad = 0
+        self.speed = 0
+
         ##Estado: 0->apagado / 1->encendido
-        self.estado = 0
-        ##Array de arrayArticulaciones
-        self.arrayArticulaciones=[]
+        self.status = 0
+
+        ##Array de joints
+        self.joints=[]
         for i in range(3):
-            self.arrayArticulaciones.append(Articulacion())
-        self.numeroVinculo = None
-        self.eslabon = None
-        self.pinza = Pinza()
-        self.tiempoDuracion = None
+            self.joints.append(Joint())
 
-    def setEstado(self,estado):
-        self.estado = estado
+        self.gripper = Gripper()
+        self.duration_time = None
 
-    def setModoOperacion(self,modoOperacion):
-        self.modoOperacion = modoOperacion
+    def setStatus(self, status):
+        self.status = status
 
-    def setAngulos(self,a1,a2,a3):
-        self.listaAngulos = [a1,a2,a3]
+    def setOperationMode(self, op_mode):
+        self.operation_mode = op_mode
+
+    def setAngles(self, a1, a2, a3):
+        self.angles = [a1, a2, a3]
         for i in range(3):
-            self.arrayArticulaciones[i].anguloRotacion = self.listaAngulos[i]
+            self.joints[i].rotation_direction = self.angles[i]
 
-    def setSentidoGiro(self,s1,s2,s3):
-        self.listaSentidosGiro = [s1,s2,s3]
+    def setRotationDirection(self,s1,s2,s3):
+        self.rotation_direction = [s1,s2,s3]
         for i in range(3):
-            self.arrayArticulaciones[i].sentidoGiro = self.listaSentidosGiro[i]
+            self.joints[i].rotation_direction = self.rotation_direction[i]
 
-    def setVelocidad(self,velocidad):
-        self.velocidad = velocidad
+    def setSpeed(self, speed:float) -> None:
+        self.speed = speed
         for i in range(3):
-            self.arrayArticulaciones[i].velocidad = velocidad
+            self.joints[i].speed = speed
 
-    def MoverPinza(self,accionPinza):
-        self.pinza.estadoPinza =  accionPinza
-        if accionPinza == 1:
-            self.pinza.abrir()
-        if accionPinza == 0:
-            self.pinza.cerrar()
+    def MoveGripper(self, action:int) -> None:
+        self.gripper.status =  action
+        
+        if action == 1:
+            self.gripper.open()
 
-    def MoverArticulacion(self):
+        if action == 0:
+            self.gripper.close()
+
+    def MoveJoint(self) -> None:
         for i in range(3):
-            self.arrayArticulaciones[i].tiempoDeInicio.append(time.strftime("%a, %d %b %Y %H:%M:%S"))
-            tiempoInicio = time.time()
-            self.arrayArticulaciones[i].girar()
-            tiempoFinal = time.time()
-            self.arrayArticulaciones[i].tiempoON.append(tiempoFinal-tiempoInicio)
+            self.joints[i].init_time.append(time.strftime("%a, %d %b %Y %H:%M:%S"))
+            init_time = time.time()
+            self.joints[i].rotate()
+            end_time = time.time()
+            self.joints[i].ONtime.append(init_time - end_time)
 
-    def MoverOrigen(self):
-        anguloTotal = []
+    def MoveOrigin(self):
+        total_angle = []
+
         for i in range(3):
-            anguloTotal.append(self.arrayArticulaciones[i].anguloTotal)
-            if anguloTotal[i] < 0:
-                self.arrayArticulaciones[i].sentidoGiro = "der"
-            elif anguloTotal[i] > 0:
-                self.arrayArticulaciones[i].sentidoGiro = "izq"
-            tiempoInicio = time.time()
-            self.arrayArticulaciones[i].girar()
-            tiempoFinal = time.time()
-            self.arrayArticulaciones[i].tiempoON.append(tiempoFinal-tiempoInicio)
+            total_angle.append(self.joints[i].total_angle)
+            if total_angle[i] < 0:
+                self.joints[i].rotation_direction = "der"
+            elif total_angle[i] > 0:
+                self.joints[i].rotation_direction = "izq"
+
+            time_init = time.time()
+            self.joints[i].rotate()
+            time_end = time.time()
+            
+            self.joints[i].ONtime.append(time_end - time_init)

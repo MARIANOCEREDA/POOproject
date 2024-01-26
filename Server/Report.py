@@ -1,44 +1,44 @@
 from RobotRRR import RobotRRR
-from XMLRPCserver import ServerXMLRPC
 
-class Reporte():
+class Report:
 
-    def mostrarDatos(self,objetoRobot,rpc_server):
+    def display(self, robot_object, rpc_server):
         at = []
         a = []
         ti = []
         tt = []
-        for i in range(3):
-            a.append(str(objetoRobot.listaAngulos[i]))
-            at.append(str(objetoRobot.arrayArticulaciones[i].anguloTotal))
-            ti.append(str(objetoRobot.arrayArticulaciones[i].tiempoDeInicio))
-            tt.append(str(objetoRobot.arrayArticulaciones[i].tiempoON))
 
-        velocidad = str(objetoRobot.arrayArticulaciones[1].velocidad)
+        for i in range(3):
+            a.append(str(robot_object.angles[i]))
+            at.append(str(robot_object.joints[i].total_angle))
+            ti.append(str(robot_object.joints[i].init_time))
+            tt.append(str(robot_object.joints[i].ONtime))
+
+        speed_list = str(robot_object.joints[1].speed)
         if rpc_server == None:
             state= "Desconectado"
         else:
-            estadoConexion=str(rpc_server.estadoDeConexion)
-            if estadoConexion == "1":
+            conn_status =str(rpc_server.conn_status)
+            if conn_status  == "1":
                 state= "Conectado"
             else:
                 state= "Desconectado"
 
-        if objetoRobot.modoOperacion == 0:
-            modo = "Manual"
-        elif objetoRobot.modoOperacion == 1:
-            modo = "Autonomo"
+        if robot_object.operation_mode == 0:
+            mode = "Manual"
+        elif robot_object.operation_mode == 1:
+            mode = "Autonomo"
  
-        if objetoRobot.pinza.estadoPinza == 1:
-            estadoP = "Abierta"
-        elif objetoRobot.pinza.estadoPinza == 0:
-            estadoP = "Cerrada"
+        if robot_object.gripper.status == 1:
+            gripper_status = "Abierta"
+        elif robot_object.gripper.status == 0:
+            gripper_status = "Cerrada"
 
         return ("Reporte de Estado ROBOT"
         +"\nConexion:"+state
-        +"\nModo de Operacion:"+modo
-        +"\nVelocidad Articulaciones:"+velocidad
-        +"\nEstado de la pinza:"+estadoP
+        +"\nModo de Operacion:"+ mode
+        +"\nVelocidad Articulaciones:"+ speed_list
+        +"\nEstado de la pinza:"+ gripper_status
         +"\n>>>>>> Articulacion 1 <<<<<<"
         +"\n\tAngulo Rotado:"+a[0]
         +"\n\tAngulo Total:"+at[0]

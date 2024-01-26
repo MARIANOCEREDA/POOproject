@@ -26,10 +26,11 @@ int UserInterface::UserInterface::DisplayMenu()
     }
 
   }
-  catch(CustomExceptions::ErrorSelection)
+  catch(const CustomExceptions::ErrorSelection& e)
   {
-    std::cout << CustomExceptions::ErrorSelection().what() << std::endl;
-    std::cout << "---------------------------------------------------------------" << '\n';
+    std::cerr << "-----------ERROR---------------" << '\n';
+    std::cerr << e.what() << '\n';
+    std::cerr << "-------------------------------" << '\n';
   }
 
   return selection;

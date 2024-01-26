@@ -12,33 +12,33 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(HEADER_FILES
-    XmlRpc.h
-    XmlRpcClient.h
-    XmlRpcDispatch.h
-    XmlRpcException.h
-    XmlRpcServer.h
-    XmlRpcServerConnection.h 
-    XmlRpcServerMethod.h 
-    XmlRpcSocket.h
-    XmlRpcSource.h
-    XmlRpcUtil.h 
-    XmlRpcValue.h
-    base64.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpc.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcClient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcDispatch.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcException.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcServer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcServerConnection.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcServerMethod.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcSocket.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcSource.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcUtil.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/XmlRpcValue.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/base64.h
 )
 
 set(SOURCE_FILES
-    XmlRpcClient.cpp
-    XmlRpcDispatch.cpp
-    XmlRpcServer.cpp
-    XmlRpcServerConnection.cpp 
-    XmlRpcServerMethod.cpp 
-    XmlRpcSocket.cpp
-    XmlRpcSource.cpp 
-    XmlRpcUtil.cpp
-    XmlRpcValue.cpp
-    main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcClient.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcDispatch.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcServer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcServerConnection.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcServerMethod.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcSocket.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcSource.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcUtil.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/XmlRpcValue.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

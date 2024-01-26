@@ -1,10 +1,10 @@
-from consolaServidor import consolaServidor
+from Console import Console
 from RobotRRR import RobotRRR
-from Reporte import Reporte
+from Report import Report
 
 if __name__ == '__main__':
-    objetoRobot = RobotRRR()
-    objetoReporte = Reporte()
-    uncli = consolaServidor(objetoRobot,objetoReporte)
+    robot = RobotRRR()
+    report = Report()
+    uncli = Console(robot, report)
     uncli.prompt = '>> '
     uncli.cmdloop('Ingrese comandos: ')

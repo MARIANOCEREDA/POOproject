@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "RobotInterface.h"
 #include "CustomExceptions.h"
