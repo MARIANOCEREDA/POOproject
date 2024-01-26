@@ -38,7 +38,7 @@ class AutoMode:
         self.arguments_list.append(
             self.ListaArg("Set Angulos Articulaciones [MODO AUTONOMO] ")
             )
-        self.robot_object.setVelocidad(self.file_content[4])
+        self.robot_object.setSpeed(self.file_content[4])
         self.arguments_list.append(
             self.ListaArg("Set Velocidad [MODO AUTONOMO]")
             )
@@ -60,7 +60,7 @@ class AutoMode:
                 self.ListaArg("Pinza abierta [MODO AUTONOMO]")
                 )
         elif self.file_content[8][0:6] == "cerrar":
-            self.robot_object.MoverPinza(0)
+            self.robot_object.MoveGripper(0)
             self.arguments_list.append(
                 self.ListaArg("Pinza cerrada [MODO AUTONOMO]")
                 )
@@ -71,7 +71,7 @@ class AutoMode:
             )
 
         if self.file_content[9][0:11] == "moverOrigen":
-            self.robot_object.MoverOrigen()
+            self.robot_object.MoveOrigin()
             self.arguments_list.append(self.ListaArg("Homing [MODO AUTONOMO]"))
 
     def ListaArg(self, order_type):

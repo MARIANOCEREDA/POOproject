@@ -40,7 +40,7 @@ class ServerXMLRPC:
                     raise
 
         #Registramos las funciones
-        self.server.register_function(self.do_setModo, "setoperation_mode")
+        self.server.register_function(self.do_setModo, "setModoOperacion")
         self.server.register_function(self.do_setAngles, "setAngulos")
         self.server.register_function(self.do_setRotationDirection,
                                       "setSentidoGiro")
@@ -72,18 +72,16 @@ class ServerXMLRPC:
         if self.robot_object.status == 1:
             if operation_mode == 0:
                 self.ListaArgs.append(self.ListaArg("Modo Operacion Manual"))
-                print("Modo manual seteado")
+                message = "Modo Manual Seteado"
                 self.robot_object.setOperationMode(operation_mode)
 
             elif operation_mode == 1:
                 self.robot_object.setOperationMode(operation_mode)
                 self.ListaArgs.append(self.ListaArg("Modo Operacion Autónomo"))
-                print("Modo autónomo seteado")
+                message = "Modo Autonomo Seteado"
                 autoMode = AutoMode(self.robot_object, self.ListaArgs)
                 autoMode.readFile()
                 autoMode.parseLines()
-
-            message = "Recibido"
 
         elif self.robot_object.status == 0:
             message = "El Robot se encuentra apagado, debe encenderlo"
@@ -93,7 +91,7 @@ class ServerXMLRPC:
     def do_setAngles(self, a1: float, a2: float, a3: float) -> str:
         self.robot_object.setAngles(a1, a2, a3)
         self.ListaArgs.append(self.ListaArg("Set Angulo Articulaciones"))
-        return "Recibido"
+        return "Angulos configurados."
 
     def do_setRotationDirection(self, s1: str, s2: str, s3: str) -> str:
         input_direction = [s1, s2, s3]
@@ -111,24 +109,26 @@ class ServerXMLRPC:
                                                output_direction[2])
         self.ListaArgs.append(self.ListaArg("Set Giro Articulaciones "))
 
-        return "Recibido"
+        return "Dirección de Rotación Seteada."
 
     def do_turnRobotOn(self, status) -> str:
 
         if status == 0:
             self.robot_object.setStatus(status)
             self.ListaArgs.append(self.ListaArg("Robot Apagado"))
+            message = "Robot Apagado"
 
         elif status == 1:
             self.robot_object.setStatus(int(status))
             self.ListaArgs.append(self.ListaArg("Robot Encendido"))
+            message = "Robot Encendido"
 
-        return "Recibido"
+        return message
 
     def do_setSpeed(self, speed: float) -> str:
         self.robot_object.setSpeed(speed)
         self.ListaArgs.append(self.ListaArg("Set Velocidad"))
-        return "Recibido"
+        return "Velocidad Seteada"
 
     def do_move(self, action_gripper) -> str:
 
@@ -140,12 +140,12 @@ class ServerXMLRPC:
         elif self.robot_object.status == 0:
             return "El robot se encuentra apagado (estado = 0), no se puede realizar el movimiento"
 
-        return "Recibido"
+        return "Robot Movilizado."
 
     def do_moveOrigin(self) -> str:
         self.robot_object.MoveOrigin()
         self.ListaArgs.append(self.ListaArg("Homing"))
-        return "Recibido"
+        return "Robot en Posición de Origen"
 
     def do_showReport(self) -> str:
         self.ListaArgs.append(self.ListaArg("Reporte Pedido"))
