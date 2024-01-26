@@ -17,7 +17,7 @@ class ServerXMLRPC():
         self.puerto = port
         while True:
             try:
-                self.server = SimpleXMLRPCServer(("localhost",self.puerto),allow_none = True)
+                self.server = SimpleXMLRPCServer(("localhost", self.puerto),allow_none = True)
                 if self.puerto != port:
                     print("Server RPC en puerto no estandar {%d}" % self.puerto)
                 break
