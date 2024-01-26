@@ -1,5 +1,6 @@
 import time
 
+
 class Gripper:
 
     def __init__(self):
@@ -10,5 +11,3 @@ class Gripper:
 
     def close(self):
         time.sleep(0.5)
-
-    

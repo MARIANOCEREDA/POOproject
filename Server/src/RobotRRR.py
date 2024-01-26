@@ -2,9 +2,8 @@ from Joint import Joint
 from Gripper import Gripper
 import time
 
+
 class RobotRRR:
-    '''
-    '''
 
     def __init__(self):
 
@@ -12,8 +11,8 @@ class RobotRRR:
         self.total_time = 0
 
         ##Lista comandos: rellena con los ángulos recibidos desde el cliente
-        self.angles = [0,0,0]
-        self.rotation_direction = ["der","der","der"]
+        self.angles = [0, 0, 0]
+        self.rotation_direction = ["der", "der", "der"]
 
         ##Modo de operacion: 0-> manual / 1-> automatico
         self.operation_mode = 0
@@ -25,7 +24,7 @@ class RobotRRR:
         self.status = 0
 
         ##Array de joints
-        self.joints=[]
+        self.joints = []
         for i in range(3):
             self.joints.append(Joint())
 
@@ -43,19 +42,19 @@ class RobotRRR:
         for i in range(3):
             self.joints[i].rotation_direction = self.angles[i]
 
-    def setRotationDirection(self,s1,s2,s3):
-        self.rotation_direction = [s1,s2,s3]
+    def setRotationDirection(self, s1, s2, s3):
+        self.rotation_direction = [s1, s2, s3]
         for i in range(3):
             self.joints[i].rotation_direction = self.rotation_direction[i]
 
-    def setSpeed(self, speed:float) -> None:
+    def setSpeed(self, speed: float) -> None:
         self.speed = speed
         for i in range(3):
             self.joints[i].speed = speed
 
-    def MoveGripper(self, action:int) -> None:
-        self.gripper.status =  action
-        
+    def MoveGripper(self, action: int) -> None:
+        self.gripper.status = action
+
         if action == 1:
             self.gripper.open()
 
@@ -64,7 +63,8 @@ class RobotRRR:
 
     def MoveJoint(self) -> None:
         for i in range(3):
-            self.joints[i].init_time.append(time.strftime("%a, %d %b %Y %H:%M:%S"))
+            self.joints[i].init_time.append(
+                time.strftime("%a, %d %b %Y %H:%M:%S"))
             init_time = time.time()
             self.joints[i].rotate()
             end_time = time.time()
@@ -83,5 +83,5 @@ class RobotRRR:
             time_init = time.time()
             self.joints[i].rotate()
             time_end = time.time()
-            
+
             self.joints[i].ONtime.append(time_end - time_init)
