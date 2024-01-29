@@ -16,9 +16,10 @@ class Console(Cmd):
 
     def do_exit(self, value):
         """"Argumento: true -> Desconecta de un dispositivo interno y sale del programa."""
-        if value == "true":
+        if value == "true" and self.rpc_server is not None:
             self.rpc_server.shutdown()
-            raise sys.exit()
+        raise sys.exit()
+            
 
     def do_rpc(self, value):
         """"Inicia/Detiene el servidor según el valor dado (true-> conecta el servidor \n false-> desconecta el servidor)."""

@@ -22,22 +22,9 @@ class ServerXMLRPC:
         self.report_object = report_object
         self.ListaArgs = []
         self.port = port
-
-        while True:
-            try:
-                self.server = SimpleXMLRPCServer(("localhost", self.port),
-                                                 allow_none=True)
-                if self.port != port:
-                    print("Server RPC en puerto no estandar {%d}" % self.port)
-                break
-
-            except socket.error as e:
-                if e.errno == 98:
-                    self.port += 1
-                    continue
-                else:
-                    print("Problema al iniciar el Servidor")
-                    raise
+        self.running = False
+        
+        self.init_server(port)
 
         #Registramos las funciones
         self.server.register_function(self.do_setModo, "setModoOperacion")
@@ -58,14 +45,41 @@ class ServerXMLRPC:
 
         print("RPC iniciado en port: ", str(self.server.server_address))
         self.conn_status = 1
+        
+    def init_server(self, port):
+        "Instancia el servidor XMLRPC en el puerto adecuado."
+        try_n = 0
+        
+        try:
+            self.server = SimpleXMLRPCServer(("localhost", self.port),
+                                                allow_none=True)
+            try_n+=1
+            
+            if self.port != port:
+                print("Server RPC en puerto no estandar {%d}" % self.port)
+                
+        except socket.error as e:
+            if e.errno == 98:
+                print("Problema al iniciar el Servidor, puerto no disponible")
+            else:
+                print("Problema al iniciar el Servidor")
+                raise
+            
 
     def run_server(self) -> None:
+        self.running = True
         self.server.serve_forever()
 
     def shutdown(self) -> None:
-        self.server.shutdown()
-        self.thread.join()
-        print("Desconectado")
+        
+        if self.running is True:
+            self.running = False
+            self.server.shutdown()
+            self.thread.join()
+            print("Servidor Desconectado")
+        
+        else:
+            print("Server is not running")
 
     def do_setModo(self, operation_mode) -> str:
 
