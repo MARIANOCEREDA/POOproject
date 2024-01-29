@@ -17,6 +17,7 @@ class Console(Cmd):
     def do_exit(self, value):
         """"Argumento: true -> Desconecta de un dispositivo interno y sale del programa."""
         if value == "true":
+            self.rpc_server.shutdown()
             raise sys.exit()
 
     def do_rpc(self, value):
@@ -25,7 +26,8 @@ class Console(Cmd):
             if self.rpc_server is None:
                 self.rpc_server = ServerXMLRPC(
                     self.robot_object, self.report_object
-                )  #este objeto inicia el servidor y se da a conocer
+                ) 
+                #este objeto inicia el servidor y se da a conocer
                 self.ListaArgs.append(self.ListaArg("Servidor Iniciado"))
 
         elif value == "false":
@@ -79,6 +81,7 @@ class Console(Cmd):
         if status == "0":
             self.robot_object.setStatus(int(status))
             self.ListaArgs.append(self.ListaArg("Robot Apagado"))
+            
         elif status == "1":
             self.robot_object.setStatus(int(status))
             self.ListaArgs.append(self.ListaArg("Robot Encendido"))
