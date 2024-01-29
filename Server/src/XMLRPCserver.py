@@ -1,10 +1,13 @@
 from xmlrpc.server import SimpleXMLRPCServer
+from util.logger import get_logger
 from threading import Thread
 from AutoMode import AutoMode
 from Report import Report
 from RobotRRR import RobotRRR
 import socket
 import time
+
+logger = get_logger("ServerXMLRPC")
 
 
 class ServerXMLRPC:
@@ -43,27 +46,36 @@ class ServerXMLRPC:
         self.thread = Thread(target=self.run_server)
         self.thread.start()
 
-        print("RPC iniciado en port: ", str(self.server.server_address))
+        logger.info("RPC iniciado en port: %s", str(self.server.server_address))
         self.conn_status = 1
         
     def init_server(self, port):
         "Instancia el servidor XMLRPC en el puerto adecuado."
         try_n = 0
         
-        try:
-            self.server = SimpleXMLRPCServer(("localhost", self.port),
-                                                allow_none=True)
-            try_n+=1
-            
-            if self.port != port:
-                print("Server RPC en puerto no estandar {%d}" % self.port)
+        while True:
+            try:
+                self.server = SimpleXMLRPCServer(("localhost", self.port),
+                                                    allow_none=True)
                 
-        except socket.error as e:
-            if e.errno == 98:
-                print("Problema al iniciar el Servidor, puerto no disponible")
-            else:
-                print("Problema al iniciar el Servidor")
-                raise
+                
+                if self.port != port:
+                    logger.error("Server RPC en puerto no estandar {%d}", self.port)
+                
+                break
+                    
+            except socket.error as e:
+                
+                try_n+=1
+                if try_n > 5:
+                    break
+                
+                if e.errno == 98:
+                    self.port+=1
+                    logger.info("Problema al iniciar el Servidor, puerto no disponible")
+                else:
+                    logger.error("Problema al iniciar el Servidor")
+                    raise
             
 
     def run_server(self) -> None:
@@ -76,10 +88,10 @@ class ServerXMLRPC:
             self.running = False
             self.server.shutdown()
             self.thread.join()
-            print("Servidor Desconectado")
+            logger.info("Servidor Desconectado")
         
         else:
-            print("Server is not running")
+            logger.info("Server is not running")
 
     def do_setModo(self, operation_mode) -> str:
 

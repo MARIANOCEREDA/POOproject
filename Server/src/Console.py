@@ -1,9 +1,12 @@
+from XMLRPCserver import ServerXMLRPC
+from util.logger import get_logger
+
 from cmd import Cmd
 import sys
-from XMLRPCserver import ServerXMLRPC
 from AutoMode import AutoMode
 import time
 
+logger = get_logger("Consola")
 
 class Console(Cmd):
 
@@ -47,14 +50,16 @@ class Console(Cmd):
             self.robot_object.operation_mode = 0
             self.ListaArgs.append(self.ListaArg("Modo Operacion Manual"))
 
-            print("Modo manual seteado")
+            logger.info("Modo manual seteado")
 
             self.robot_object.setOperationMode(int(operation_mode))
 
         elif operation_mode == "1":
             self.robot_object.setOperationMode(int(operation_mode))
-            self.ListaArgs.append(self.ListaArg("Modo Operacion Autónomo"))
-            print("Modo autónomo seteado")
+            self.ListaArgs.append(self.ListaArg("Modo Operacion Autónomo")
+                                  )
+            logger.info("Modo autónomo seteado")
+            
             autoMode = AutoMode(self.robot_object, self.ListaArgs)
             autoMode.readFile()
             autoMode.parseLines()
@@ -100,7 +105,7 @@ class Console(Cmd):
             self.ListaArgs.append(self.ListaArg("Movimiento Realizado"))
 
         elif self.robot_object.status == 0:
-            print(
+            logger.info(
                 "El robot se encuentra apagado, para moverlo debe encenderlo")
 
     def do_moveOrigin(self, value):
@@ -115,7 +120,7 @@ class Console(Cmd):
         sumlista2 = ""
         if self.rpc_server is not None:
             sumlista2 = "".join(self.rpc_server.ListaArgs)
-        return print(
+        return logger.info(
             self.report_object.display(self.robot_object, self.rpc_server) +
             "\n\n>>>>>> Lista de Ordenes Recibidas <<<<<<\n" + sumlista +
             "\n\n>>>>>>      CLIENTE     <<<<<<\n" + sumlista2)
@@ -123,9 +128,9 @@ class Console(Cmd):
     def do_status(self, value):
         """Devuelve el estado de conexion del servidor"""
         if self.rpc_server == None:
-            print("Estado servidor : Desconectado")
+            logger.info("Estado servidor : Desconectado")
         else:
-            print("Estado servidor : Conectado")
+            logger.info("Estado servidor : Conectado")
 
     def ListaArg(self, order_type):
         return ("[" + time.strftime("%a, %d %b %Y %H:%M:%S") + "]:      " +
